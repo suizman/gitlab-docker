@@ -16,9 +16,10 @@ services:
       - RUNNER_NAME
       - RUNNER_IMAGE
       - RUNNER_TOKEN
+      - RUNNER_EXTRA_HOSTS
     links: 
       - gitlab-server:gitlab-server.dev.local
-    command: register -n -u $SERVER_URL -r $RUNNER_TOKEN --name $RUNNER_NAME --executor docker --docker-image $RUNNER_IMAGE
+    command: register -n -u $SERVER_URL -r $RUNNER_TOKEN --name $RUNNER_NAME --executor docker --docker-image $RUNNER_IMAGE --docker-extra-hosts $RUNNER_EXTRA_HOSTS
   gitlab-runner:
     image: gitlab/gitlab-runner:latest
     volumes:
