@@ -6,7 +6,7 @@ services:
     ports:
       - "80:80"
       - "2222:22"
-  gitlab-runner:
+  gitlab-runner-reg:
     image: gitlab/gitlab-runner:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -18,5 +18,12 @@ services:
       - RUNNER_TOKEN
     links: 
       - gitlab-server:gitlab-server.dev.local
-    command: register -n -u $SERVER_URL -r $RUNNER_TOKEN --name $RUNNER_NAME --executor docker --docker-image $RUNNER_IMAGE 
+    command: register -n -u $SERVER_URL -r $RUNNER_TOKEN --name $RUNNER_NAME --executor docker --docker-image $RUNNER_IMAGE
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+    links: 
+      - gitlab-server:gitlab-server.dev.local
 
