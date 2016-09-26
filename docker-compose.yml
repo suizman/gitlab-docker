@@ -1,0 +1,22 @@
+version: '2'
+services:
+  gitlab-server:
+    image: gitlab/gitlab-ce
+    hostname: gitlab-server.dev.local
+    ports:
+      - "80:80"
+      - "2222:22"
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/gitlab-runner/config:/etc/gitlab-runner
+    environment:
+      - SERVER_URL
+      - RUNNER_NAME
+      - RUNNER_IMAGE
+      - RUNNER_TOKEN
+    links: 
+      - gitlab-server:gitlab-server.dev.local
+    command: register -n -u $SERVER_URL -r $RUNNER_TOKEN --name $RUNNER_NAME --executor docker --docker-image $RUNNER_IMAGE 
+
